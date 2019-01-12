@@ -7,7 +7,7 @@
     <Company />
     <Product />
     <Description>.NET Standard 2.0 compatible library to manage embedded files in loaded assemblies</Description>
-    <Copyright>Copyright (c) 2018 Max Jäger</Copyright>
+    <Copyright>Copyright (c) 2019 Max Jäger</Copyright>
     <RepositoryUrl>https://github.com/JaegerMa/EmbeddedSharpFiles</RepositoryUrl>
     <PackageTags>arg args arguments params parameters split</PackageTags>
     <PackageProjectUrl>https://github.com/JaegerMa/EmbeddedSharpFiles</PackageProjectUrl>
