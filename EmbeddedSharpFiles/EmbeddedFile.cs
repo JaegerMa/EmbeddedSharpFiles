@@ -118,6 +118,20 @@ namespace EmbeddedSharpFiles
 				return false;
 			}
 		}
+		public virtual bool TryExtractTo(string path, bool skipIfExisting = false)
+		{
+			Log($"Trying to extract '{this.ResourceString}' to '{path}'", LogLevel.DEBUG);
+			try
+			{
+				this.ExtractTo(path, skipIfExisting: skipIfExisting);
+				return true;
+			}
+			catch(Exception x)
+			{
+				Log($"Error while extracting '{this.ResourceString}' to '{path}': {x.ToString()}", LogLevel.ERROR);
+				return false;
+			}
+		}
 
 
 
