@@ -104,7 +104,7 @@ namespace EmbeddedSharpFiles
 
 			return this.ExtractTo(filePath, skipIfExisting: skipIfExisting);
 		}
-		public virtual bool TryExtract(string directory, string fileName = null, bool skipIfExisting = false)
+		public virtual bool TryExtractToDirectory(string directory, string fileName = null, bool skipIfExisting = false)
 		{
 			Log($"Trying to extract '{this.ResourceString}' to directory '{directory}', file '{fileName}'", LogLevel.DEBUG);
 			try
