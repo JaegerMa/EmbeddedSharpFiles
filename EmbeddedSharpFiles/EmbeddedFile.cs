@@ -64,28 +64,45 @@ namespace EmbeddedSharpFiles
 				return reader.ReadToEnd();
 		}
 
-		public virtual void ExtractTo(string path)
+		public virtual bool ExtractTo(string path, bool skipIfExisting = false)
 		{
 			Log($"Extracting '{this.ResourceString}' to '{path}'", LogLevel.DEBUG);
-			CreateDirectory(path);
+			if(skipIfExisting && Exists())
+			{
+				Log($"Won't extract '{this.ResourceString}' to {path} as it already exists", LogLevel.DEBUG);
+				return false;
+			}
+			
 
-			using(var resourceStream = GetContentStream())
+			var resourceStream = this.GetContentStream();
+			if(resourceStream == null)
+				throw new Exception($"Resource '{this.ResourceString}' not found");
+
+
+			this.CreateDirectory(path);
+
+			using(resourceStream)
 			using(var writeStream = new FileStream(path, FileMode.Create))
 				resourceStream.CopyTo(writeStream);
+
+			return true;
+
+
+			bool Exists()
+			{
+				Log($"Checking if file '{path}' exists", LogLevel.DEBUG);
+				var fileExists = File.Exists(path);
+				Log($"File '{path}' {(fileExists ? "exists" : "doesn't exist")}", LogLevel.DEBUG);
+
+				return fileExists;
+			}
 		}
 		public virtual bool Extract(string directory, string fileName = null, bool skipIfExisting = false)
 		{
 			fileName = fileName ?? this.FileName ?? this.ResourceName;
-
-			if(skipIfExisting && Exists(directory, fileName))
-			{
-				Log($"Won't extract '{this.ResourceString}' to directory '{directory}', file '{fileName}' as it already exists", LogLevel.DEBUG);
-				return false;
-			}
-
 			var filePath = Path.Combine(directory, fileName);
-			ExtractTo(filePath);
-			return true;
+
+			return this.ExtractTo(filePath, skipIfExisting: skipIfExisting);
 		}
 		public virtual bool TryExtract(string directory, string fileName = null, bool skipIfExisting = false)
 		{
@@ -102,17 +119,6 @@ namespace EmbeddedSharpFiles
 			}
 		}
 
-		public virtual bool Exists(string directory, string fileName = null)
-		{
-			fileName = fileName ?? this.FileName ?? this.ResourceName;
-			var filePath = Path.Combine(directory, fileName);
-
-			Log($"Checking if file '{filePath}' exists", LogLevel.DEBUG);
-			var fileExists = File.Exists(filePath);
-			Log($"File '{filePath}' {(fileExists ? "exists" : "doesn't exist")}", LogLevel.DEBUG);
-
-			return fileExists;
-		}
 
 
 		protected virtual void CreateDirectory(string path)
