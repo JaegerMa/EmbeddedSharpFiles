@@ -9,6 +9,13 @@ First, we have to create an `EmbeddedFile` instance referencing our embedded fil
 ```csharp
 var embeddedFile = new EmbeddedFile("myembedded-file-name.bin", typeof(SomeClassInTheNamespace));
 ```
+
+If the resource lies in a subfolder, the folder is part of the name:
+```csharp
+var embeddedFile = new EmbeddedFile("myResourceFolder.myembedded-file-name.bin", typeof(SomeClassInTheNamespace));
+```
+
+
 Now this instance can be used to either get the stream to the content, the string contained in the embedded file, or it can directly be extracted to a certain file.
 The content string is created using UTF-8.
 ```csharp
@@ -21,16 +28,18 @@ using(var contentStream = embeddedFile.ContentStream)
 var content = embeddedFile.ContentString;
 ```
 ```csharp
-embeddedFile.Extract(@"C:\Foo\Bar\myextractedfile.bin");
+embeddedFile.ExtractTo(@"C:\Foo\Bar\myextractedfile.bin");
 
 //If no file name is stored in the EmbeddedFile instance and no
 //file name is passed to .ExtractTo, the resource name is used.
-embeddedFile.ExtractTo(@"C:\Foo\Bar"); // -> Extracts to C:\Foo\Bar\myebedded-file-name.bin
+embeddedFile.ExtractToDirectory(@"C:\Foo\Bar"); // -> Extracts to C:\Foo\Bar\myebedded-file-name.bin
 
-//While .ExtractTo will throw an exception if something goes wrong, .TryExtractTo
-//would catch it and returns a bool indicating whether extraction was successfull
-embeddedFile.TryExtractTo(@"C:\Foo\Bar", "myextractedfile.bin");
+//While .ExtractTo and .ExtractToDirectory will throw an exception if something goes wrong,
+//.TryExtractTo and .TryExtractToDirectory will catch exceptions and return a bool indicating
+//whether extraction was successfull
+embeddedFile.TryExtractToDirectory(@"C:\Foo\Bar", "myextractedfile.bin");
 ```
+
 ### EmbeddedFileDictionary
 To store and globally access your embedded files from different classes, instances or modules, there's the `EmbeddedFileDictionary`.
 Basically, it's just a .NET `Dictionary<string, EmbeddedFile>` with some managing code around it.
@@ -42,6 +51,7 @@ EmbeddedDictionary.SetFile("myembedded-file", embeddedFile);
 
 var file = EmbeddedFileDictionary.GetFile("myembedded-file");
 ```
+
 #### Events
 `EmbeddedFileDictionary` provides some events to inject into get- and set-calls, but these currently aren't documented.
 
