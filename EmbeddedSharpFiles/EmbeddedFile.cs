@@ -97,7 +97,7 @@ namespace EmbeddedSharpFiles
 				return fileExists;
 			}
 		}
-		public virtual bool Extract(string directory, string fileName = null, bool skipIfExisting = false)
+		public virtual bool ExtractToDirectory(string directory, string fileName = null, bool skipIfExisting = false)
 		{
 			fileName = fileName ?? this.FileName ?? this.ResourceName;
 			var filePath = Path.Combine(directory, fileName);
@@ -109,7 +109,7 @@ namespace EmbeddedSharpFiles
 			Log($"Trying to extract '{this.ResourceString}' to directory '{directory}', file '{fileName}'", LogLevel.DEBUG);
 			try
 			{
-				Extract(directory, fileName: fileName, skipIfExisting: skipIfExisting);
+				ExtractToDirectory(directory, fileName: fileName, skipIfExisting: skipIfExisting);
 				return true;
 			}
 			catch(Exception x)
