@@ -20,6 +20,7 @@ namespace EmbeddedSharpFiles
 		public string ResourceString => $"{this.ResourceNamespace}.{this.ResourceName}";
 		public Stream ContentStream => GetContentStream();
 		public string ContentString => GetContentString();
+		public bool Exists => this._Exists();
 
 		public EmbeddedFile()
 		{ }
@@ -133,6 +134,17 @@ namespace EmbeddedSharpFiles
 			}
 		}
 
+		protected bool _Exists()
+		{
+			var stream = this.GetContentStream();
+			if(stream == null)
+				return false;
+
+
+			stream.Close();
+
+			return true;
+		}
 
 
 		protected virtual void CreateDirectory(string path)
